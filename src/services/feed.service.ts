@@ -32,7 +32,7 @@ export class FeedService {
     const { following } = user;
 
     const postsCount: number = await this.Posts.find({
-      createdBy: { $in: following },
+      userId: { $in: following },
     }).count();
 
     if (pageNumber * this.PER_PAGE_ITEMS >= postsCount + this.PER_PAGE_ITEMS)
@@ -41,7 +41,7 @@ export class FeedService {
         HttpStatus.NOT_FOUND,
       );
 
-    const posts = await this.Posts.find({ createdBy: { $in: following } })
+    const posts = await this.Posts.find({ userId: { $in: following } })
       .sort(orderSort)
       .skip((pageNumber - 1) * this.PER_PAGE_ITEMS)
       .limit(this.PER_PAGE_ITEMS);
