@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -20,9 +19,7 @@ export const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password missing'],
-      min: 3,
-      max: 50,
+      required: true,
     },
     isModerator: {
       type: Boolean,
@@ -43,25 +40,3 @@ export const UserSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-
-// Functions to fire before document gets saved to DB
-// Hashing passwords before saving to DB
-UserSchema.pre('save', async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-// Parameters: Email and Password
-// Return: Returns user if the user is logged in successfully
-UserSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
-  if (user) {
-    const auth = await bcrypt.compare(password, user.password);
-    if (auth) {
-      return user;
-    }
-    throw Error('incorrect password');
-  }
-  throw Error('incorrect email');
-};

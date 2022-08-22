@@ -51,7 +51,11 @@ export class PaymentService {
         charge: charge,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 }

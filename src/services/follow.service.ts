@@ -40,7 +40,11 @@ export class FollowService {
         user: user,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -80,7 +84,11 @@ export class FollowService {
         user: user,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 }

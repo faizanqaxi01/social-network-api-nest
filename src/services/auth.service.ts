@@ -18,14 +18,17 @@ export class AuthService {
       const firstName = signUpDto.firstName;
       const lastName = signUpDto.lastName;
       const email = signUpDto.email;
-      const password = signUpDto.password;
-
+      let password = signUpDto.password;
       const user = await this.Users.findOne({ email });
 
       if (user)
         throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
 
-      const newUser = await this.Users.create({
+      // hashing password
+      const salt = await bcrypt.genSalt();
+      password = await bcrypt.hash(password, salt);
+
+      const newUser = new this.Users({
         firstName,
         lastName,
         email,
@@ -33,11 +36,10 @@ export class AuthService {
       });
 
       const token = jwt.sign(
-        { id: newUser._id.toString() },
+        { id: user._id.toString() },
         process.env.JWT_SECRET,
         { expiresIn: '24h' },
       );
-
       return {
         success: true,
         msg: 'Successfully registered',
@@ -45,7 +47,11 @@ export class AuthService {
         token,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -73,7 +79,11 @@ export class AuthService {
       }
       throw new HttpException('Invalid Credentials', HttpStatus.BAD_REQUEST);
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 }

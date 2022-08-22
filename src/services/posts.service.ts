@@ -21,7 +21,11 @@ export class PostsService {
       const post = await this.Posts.findById(id);
       return post;
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -41,7 +45,11 @@ export class PostsService {
 
       return { success: true, post: newPost };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -65,7 +73,11 @@ export class PostsService {
       this.socketsGateway.handleUpdate(updatedPost, 'Post Updated');
       return { success: true, post: updatedPost };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -84,7 +96,11 @@ export class PostsService {
       this.socketsGateway.handleDelete(deletedPost, 'Post Deleted');
       return { success: true, post: deletedPost };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 }

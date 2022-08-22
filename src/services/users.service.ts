@@ -21,7 +21,11 @@ export class UsersService {
         following: user.following,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -46,7 +50,11 @@ export class UsersService {
         user: user,
       };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 
@@ -61,7 +69,11 @@ export class UsersService {
           user: user,
         };
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        msg: 'Something went wrong',
+        error: error,
+      };
     }
   }
 }
